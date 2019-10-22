@@ -1,3 +1,9 @@
 (executable
- (name hello_world)
- (libraries cohttp-lwt cohttp-lwt-unix cohttp lwt))
+ (name runner)
+ (preprocess (pps ppx_yojson_conv))
+ (libraries 
+  yojson
+  cohttp-lwt 
+  cohttp-lwt-unix 
+  cohttp))
+(include_subdirs unqualified)

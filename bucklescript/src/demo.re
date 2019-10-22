@@ -1,26 +1,22 @@
 open Express;
 
-/* return the string value for [key], None if the key is not in [dict]
-   TODO once BOption.map is released */
-let getDictString = (dict, key) =>
-  switch (Js.Dict.get(dict, key)) {
-  | Some(json) => Js.Json.decodeString(json)
-  | _ => None
-  };
-
-/* make a common JSON object representing success */
-let makeSuccessJson = () => {
-  let json = Js.Dict.empty();
-  Js.Dict.set(json, "success", Js.Json.boolean(true));
-  Js.Json.object_(json);
-};
-
 let app = express();
 
 App.post(app, ~path="",
-Middleware.from((_next, _req) => {
-  Response.sendJson(makeSuccessJson())
-}
+  Middleware.from((_next, _req) => {
+
+    let markdown_it = Markdown.markdown_it(());
+    let attrs = Markdown.markdown_it_attrs;
+    let () = Markdown.use(markdown_it, attrs, Js_dict.empty());
+
+    let result = Markdown.render(markdown_it, {js|
+# Header {.is-size-1}
+
+Start of my blogisek
+    |js});
+
+    Response.sendString(result);
+  }
 ));
 
 App.disable(app, ~name="x-powered-by");
@@ -34,4 +30,5 @@ let onListen = e =>
   };
 
 let server = App.listen(app, ~port=6002, ~onListen, ());
+
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "change"
+echo "restaring runner.exe"
 
-killall hello_world.exe 
-./_build/default/hello_world.exe &
+killall runner.exe 
+./_build/default/runner.exe &
 
